@@ -5,10 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
-    
-    <script>
-
-    </script>
 
     <title>Markdown Previewer</title>
 </head>
@@ -22,12 +18,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6 bg-primary">
-                <p>The editor will be here</p>
-                <textarea name="editor" id="editor" cols="30" rows="10"></textarea>
+            <div class="col-6 bg-primary d-flex flex-column">
+                <h2 class="text-white text-center my-3">Editor</h2>
+                <div class="form-group flex-grow-1 d-flex flex-column">
+                    <textarea class="form-control flex-grow-1" onkeyup="transformMDtoHTML()" name="editor" id="editor"></textarea>
+                </div>
+
             </div>
             <div class="col-6 bg-danger">
-                <p>The MD will be here</p>
+                <h2 class="text-white text-center my-3">Previewer</h2>
                 <div id="preview">
 
                 </div>
@@ -35,8 +34,47 @@
         </div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.2.5/marked.min.js" integrity="sha512-5JZDwulT+S/K8p/KO4tikNKA5t6Ebb+tqPwT7Ma+lVpJuS4G+Z0lSktWcl8hymXeFqCprGEuKGOCrKjyulql/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+    
+    <script>
+        window.onload = init
+
+        function init () {
+            const initialMD = `\
+# H1.Heading
+## H2.Heading
+\`<div></div>\`
+\`\`\`
+function anotherExample(firstLine, lastLine) {
+    if (firstLine == '\`\`\`' && lastLine == '\`\`\`') {
+      return multiLineCode;
+    }
+  }
+\`\`\`
+
+**bold**
+> Block Quotes!
+
+1. And there are numbered lists too.
+1. Use just 1s if you want!
+
+[links](https://www.freecodecamp.org)
+![freeCodeCamp Logo](https://cdn.freecodecamp.org/testable-projects-fcc/images/fcc_secondary.svg)
+`;
+
+            document.querySelector("#editor").value = initialMD
+            transformMDtoHTML()
+        }
+
+        function transformMDtoHTML () {
+            let stringMD = document.querySelector("#editor").value
+            let stringHTML = marked.parse(stringMD)
+            
+            document.querySelector("#preview").innerHTML = stringHTML
+        }
+    </script>
+
 </body>
 </html>
